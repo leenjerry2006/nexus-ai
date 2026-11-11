@@ -1,0 +1,168 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>NEXUS AI</title>
+<meta name="theme-color" content="#07090f"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="NEXUS AI">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#07090f;--panel:rgba(20,26,42,.72);--bd:rgba(0,229,255,.18);--tx:#e6f1ff;--mut:#8aa0bd;--cy:#00e5ff;--bl:#3d7bff;--pu:#8b5cf6;--ok:#2ee6a6;--bad:#ff5c7a;--inp:#0d1320;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eef3fb;--panel:rgba(255,255,255,.88);--bd:rgba(30,80,200,.22);--tx:#0e1a2e;--mut:#51627d;--cy:#0077b6;--bl:#2457e6;--pu:#6d3fd8;--ok:#0a8f66;--bad:#d1294b;--inp:#fff}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);background-image:radial-gradient(900px 500px at 10% -10%,rgba(61,123,255,.2),transparent),radial-gradient(700px 500px at 100% 0,rgba(139,92,246,.17),transparent);color:var(--tx);font:14px/1.5 "Segoe UI",system-ui,sans-serif;min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 14px 40px}
+header{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin-bottom:16px}
+.logo{display:flex;gap:12px;align-items:center}h1{margin:0;font-size:24px;letter-spacing:.18em;background:linear-gradient(90deg,var(--cy),var(--pu));-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo p{margin:0;color:var(--mut);font-size:12px}h2{margin:0 0 10px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--cy)}
+.card{background:var(--panel);border:1px solid var(--bd);border-radius:14px;padding:16px;backdrop-filter:blur(10px);margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:var(--panel);border:1px solid var(--bd);border-radius:14px;padding:14px;transition:transform .2s,border-color .2s}.kpi:hover{transform:translateY(-2px);border-color:var(--cy)}
+.kpi small{color:var(--mut);display:block;font-size:12px}.kpi b{font-size:22px}.ok{color:var(--ok)}.bad{color:var(--bad)}.cy{color:var(--cy)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.grid2 .card{margin:0}.grid2{margin-bottom:14px}
+.ch{position:relative;height:240px}.empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--mut);text-align:center;padding:10px}
+input,select,textarea,button{font:inherit;color:var(--tx);background:var(--inp);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;max-width:100%}
+button{cursor:pointer;background:linear-gradient(135deg,rgba(0,229,255,.18),rgba(139,92,246,.22));transition:border-color .2s}button:hover{border-color:var(--cy)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;align-items:end}.row label{font-size:12px;color:var(--mut);display:block}.row input,.row select{width:100%}
+#msg{min-height:20px;margin-top:8px;font-size:13px}.demo{background:rgba(139,92,246,.18);border:1px solid var(--pu);border-radius:12px;padding:10px 14px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse}th,td{padding:8px 6px;text-align:left;border-bottom:1px solid var(--bd);white-space:nowrap}th{color:var(--mut);font-size:12px;font-weight:600}td.n{color:var(--mut);white-space:normal}td button{padding:4px 8px;margin-right:4px;font-size:12px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}textarea{width:100%;height:110px;font-family:monospace;font-size:12px}.foot{color:var(--mut);font-size:12px;text-align:center;margin-top:20px}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}@keyframes drift{0%,100%{background-position:0 0,100% 0}50%{background-position:50px 40px,calc(100% - 50px) 40px}}@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,229,255,.55)}70%{box-shadow:0 0 0 12px rgba(0,229,255,0)}}
+body{background-repeat:no-repeat;animation:drift 22s ease-in-out infinite}.card,.demo,.kpis{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}.grid2 .card:nth-child(2){animation-delay:.1s}.card{transition:border-color .25s,box-shadow .25s}.card:hover{border-color:rgba(0,229,255,.5);box-shadow:0 0 26px rgba(0,229,255,.09)}button:active{transform:scale(.95)}
+.mut{color:var(--mut)}.jh{display:flex;gap:12px;align-items:center;margin-bottom:10px}.orb{width:34px;height:34px;border-radius:50%;flex:none;background:radial-gradient(circle at 35% 30%,#fff,var(--cy) 35%,var(--pu));animation:pulse 2.4s infinite}
+.log{max-height:280px;overflow:auto;padding:2px}.msg{max-width:88%;padding:8px 12px;border-radius:12px;margin:6px 0;animation:rise .3s both;word-wrap:break-word}.msg.ai{background:rgba(0,229,255,.1);border:1px solid var(--bd)}.msg.me{margin-left:auto;background:rgba(61,123,255,.28)}.msg button{margin:8px 6px 0 0}.dots i{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:var(--cy);animation:blink 1s infinite}.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}.chips button{font-size:12px;padding:5px 10px;border-radius:99px}
+summary{cursor:pointer;color:var(--cy);font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}details[open] summary{margin-bottom:12px}
+[hidden]{display:none!important}.ln{padding:10px 0;border-bottom:1px solid var(--bd)}.lh{display:flex;justify-content:space-between;gap:8px}.warn{color:#ffb84d}.pb{height:6px;border-radius:9px;background:var(--inp);margin:8px 0;overflow:hidden}.pb i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cy),var(--pu));border-radius:9px;transition:width .9s cubic-bezier(.2,.7,.2,1)}.lf{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.lf input{width:120px}.lf>span{flex:1 1 180px}.rem{background:rgba(255,184,77,.14);border:1px solid #ffb84d;border-radius:12px;padding:10px 14px;margin-bottom:14px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><div class="wrap">
+<header><div class="logo"><svg width="40" height="40" viewBox="0 0 40 40"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00e5ff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><path d="M20 3l14 8v18l-14 8-14-8V11z" fill="none" stroke="url(#g)" stroke-width="2.5"/><path d="M13 27V13l14 14V13" fill="none" stroke="url(#g)" stroke-width="2.5" stroke-linejoin="round"/></svg><div><h1>NEXUS AI</h1><p>Your money. Your decisions. Your intelligence.</p></div></div>
+<div class="bar"><select id="mon" aria-label="Period"></select><select id="cur" aria-label="Currency"></select></div></header>
+<div id="demo" class="demo" hidden><span>Demo data is loaded. The figures below include sample entries, not your real money.</span><button id="rmdemo">Remove demo data</button></div>
+<div class="card"><div class="jh"><div class="orb"></div><div><h2 style="margin:0">JARVIS</h2><small class="mut">Rule-based assistant. Every number is calculated from your own entries. It is not an AI model.</small></div></div><div class="log" id="log"></div><div class="bar chips" id="chips" style="margin-top:8px"></div><div class="bar"><input id="ask" placeholder="Ask JARVIS… e.g. how much did I spend this week?" style="flex:1;min-width:200px"><button id="go">Send</button></div></div>
+<div id="rem" class="rem" hidden></div>
+<section class="kpis" id="kpis"></section>
+<section class="grid2"><div class="card"><h2>Cash flow</h2><div class="ch"><canvas id="c1"></canvas><div class="empty" id="e1">No transactions yet.</div></div></div>
+<div class="card"><h2>Spending by category</h2><div class="ch"><canvas id="c2"></canvas><div class="empty" id="e2">No expenses in this period.</div></div></div></section>
+<div class="card" id="loans"><div class="jh"><h2 style="margin:0">Money lent</h2><span id="ltot" class="mut"></span></div><div class="row"><div><label>Who</label><input id="lw" maxlength="40" placeholder="Name"></div><div><label>Amount</label><input type="number" id="la" min="0.01" step="0.01" placeholder="0.00"></div><div><label>Date lent</label><input type="date" id="ld"></div><div><label>Due date (optional)</label><input type="date" id="lu"></div><div><label>Note</label><input id="ln" maxlength="100" placeholder="Optional"></div><div><button id="lb">Add loan</button></div></div><div id="lmsg" class="foot" style="text-align:left"></div><div id="ll"></div></div>
+<div class="card"><h2 id="ft">Add transaction</h2><div class="row">
+<div><label>Date</label><input type="date" id="d"></div><div><label>Type</label><select id="ty"><option value="expense">Expense</option><option value="income">Income</option></select></div>
+<div><label>Amount</label><input type="number" id="a" min="0.01" step="0.01" placeholder="0.00"></div>
+<div><label>Category</label><input id="c" list="cl" placeholder="Pick or type"><datalist id="cl"></datalist></div>
+<div><label>Note</label><input id="n" maxlength="120" placeholder="Optional"></div>
+<div><button id="sub">Add</button> <button id="can" hidden>Cancel</button></div></div><div id="msg"></div></div>
+<div class="card"><h2>Transactions</h2><div class="bar"><input id="q" placeholder="Search notes or categories"><select id="fty"><option value="">All types</option><option value="income">Income</option><option value="expense">Expense</option></select></div>
+<div class="tw"><table><thead><tr><th>Date</th><th>Category</th><th>Note</th><th>Amount</th><th></th></tr></thead><tbody id="tb"></tbody></table></div><div id="more" class="foot"></div></div>
+<details class="card"><summary>Settings and data tools</summary><div class="bar"><button id="b1">Show CSV</button><button id="b2">Show JSON backup</button><button id="b3">Import CSV text</button><button id="b4">Restore JSON backup</button><button id="b5">Copy</button><button id="b8">Download</button><button id="b6">Load demo data</button><button id="b7">Clear all data</button><input type="file" id="fi" accept=".csv,.json,.txt"></div>
+<textarea id="io" placeholder="Paste CSV (columns: date, amount, and optionally type, category, note) or a JSON backup here, or choose a file."></textarea><div id="msg2" class="foot" style="text-align:left"></div></details>
+<p class="foot">Your data stays on this device only. Back it up with the JSON option before clearing browser data.</p></div>
+<script>
+const $=id=>document.getElementById(id),KEY="nexus_ai_v1";
+const CATS=["Food","Transportation","Education","Shopping","Entertainment","Rent","Healthcare","Travel","Subscriptions","Investments","Savings","Other"],INC=["Salary","Freelance","Gift","Other income"];
+const PAL=["#00e5ff","#3d7bff","#8b5cf6","#2ee6a6","#ffb84d","#ff5c7a","#ff8bd1","#9be15d","#4dd2ff","#c084fc","#f59e0b","#94a3b8"];
+let S={tx:[],cur:"INR",m:"all",edit:null,del:null,loans:[],ld:null},c1=null,c2=null,clr=0;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const f=(n,d=0)=>{try{return new Intl.NumberFormat(S.cur==="INR"?"en-IN":"en-US",{style:"currency",currency:S.cur,minimumFractionDigits:d,maximumFractionDigits:d}).format(n)}catch(e){return n.toFixed(d)}};
+const valid=t=>t&&/^\d{4}-\d{2}-\d{2}$/.test(t.date)&&(t.type==="income"||t.type==="expense")&&isFinite(t.amount)&&t.amount>0&&typeof t.category==="string"&&t.category.trim()!=="";
+const clean=t=>({id:t.id||uid(),date:t.date,type:t.type,amount:Math.round(t.amount*100)/100,category:t.category.trim().slice(0,40),note:String(t.note||"").slice(0,120),...(t.demo?{demo:true}:{})});
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);if(Array.isArray(o.tx))S.tx=o.tx.filter(valid).map(clean);if(o.cur)S.cur=o.cur;if(Array.isArray(o.loans))S.loans=o.loans.filter(validL)}}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({tx:S.tx,cur:S.cur,loans:S.loans}))}catch(e){}}
+const sum=(a,t)=>a.filter(x=>x.type===t).reduce((s,x)=>s+x.amount,0);
+function msg(t,ok){const m=$("msg");m.textContent=t;m.className=ok?"ok":"bad"}
+function msg2(t){$("msg2").textContent=t}
+function normDate(s){s=String(s||"").trim();let m=s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/),y,mo,d;if(m){y=+m[1];mo=+m[2];d=+m[3]}else if(m=s.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/)){d=+m[1];mo=+m[2];y=+m[3]}else return"";const dt=new Date(y,mo-1,d);if(dt.getFullYear()!==y||dt.getMonth()!==mo-1||dt.getDate()!==d)return"";return y+"-"+String(mo).padStart(2,"0")+"-"+String(d).padStart(2,"0")}
+function parseCSV(t){const rows=[];let r=[],c="",q=false;for(let i=0;i<t.length;i++){const ch=t[i];if(q){if(ch==='"'){if(t[i+1]==='"'){c+='"';i++}else q=false}else c+=ch}else if(ch==='"')q=true;else if(ch===","){r.push(c);c=""}else if(ch==="\n"||ch==="\r"){if(ch==="\r"&&t[i+1]==="\n")i++;r.push(c);c="";if(r.some(x=>x.trim()))rows.push(r);r=[]}else c+=ch}r.push(c);if(r.some(x=>x.trim()))rows.push(r);return rows}
+function importCSV(text){const rows=parseCSV(text);if(rows.length<2)return msg2("Nothing to import. The CSV needs a header row and at least one data row.");
+const h=rows[0].map(x=>x.trim().toLowerCase()),ix=n=>h.indexOf(n),dI=ix("date"),aI=ix("amount"),tI=ix("type"),cI=ix("category"),nI=ix("note")>=0?ix("note"):ix("description");
+if(dI<0||aI<0)return msg2("The CSV needs at least a date column and an amount column.");let ok=0,bad=0;
+rows.slice(1).forEach(r=>{const date=normDate(r[dI]),a=parseFloat(String(r[aI]||"").replace(/[^0-9.\-]/g,""));let type;
+if(tI>=0&&r[tI]){const v=r[tI].trim().toLowerCase();type=/^(inc|cred|in)/.test(v)?"income":/^(exp|deb|out)/.test(v)?"expense":(a<0?"expense":"income")}else type=a<0?"expense":"income";
+const t={date,type,amount:Math.abs(a),category:(cI>=0&&r[cI]&&r[cI].trim())||(type==="income"?"Other income":"Other"),note:nI>=0?r[nI]:""};
+if(valid(t)){S.tx.push(clean(t));ok++}else bad++});save();render();msg2("Imported "+ok+" transaction"+(ok===1?"":"s")+(bad?"; skipped "+bad+" invalid row"+(bad===1?"":"s"):"")+".")}
+function toCSV(){const q=v=>'"'+String(v).replace(/"/g,'""')+'"';return"date,type,amount,category,note\n"+S.tx.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(t=>[t.date,t.type,t.amount,q(t.category),q(t.note)].join(",")).join("\n")}
+function demo(){let s=7;const r=()=>(s=(s*1103515245+12345)&0x7fffffff)/0x7fffffff,out=[],now=new Date();
+for(let k=2;k>=0;k--){const y=new Date(now.getFullYear(),now.getMonth()-k,1),ym=y.getFullYear()+"-"+String(y.getMonth()+1).padStart(2,"0");
+const add=(day,type,amt,category,note)=>out.push({id:uid(),date:ym+"-"+String(k===0?Math.min(day,now.getDate()):day).padStart(2,"0"),type,amount:Math.round(amt),category,note,demo:true});
+add(1,"income",55000,"Salary","Monthly salary");if(r()>.4)add(18,"income",6000+r()*4000,"Freelance","Side project");add(3,"expense",15000,"Rent","Rent");add(10,"expense",499,"Subscriptions","Streaming");add(12,"expense",799,"Subscriptions","Phone plan");
+for(let i=0;i<9;i++)add(2+Math.floor(r()*26),"expense",150+r()*600,"Food","Meals");for(let i=0;i<6;i++)add(2+Math.floor(r()*26),"expense",60+r()*300,"Transportation","Local travel");
+add(8+Math.floor(r()*15),"expense",800+r()*3500,"Shopping","Shopping");add(14,"expense",300+r()*700,"Entertainment","Movie");if(r()>.5)add(20,"expense",600+r()*1500,"Healthcare","Pharmacy");add(25,"expense",5000,"Savings","Monthly savings")}return out}
+function render(){
+const months=[...new Set(S.tx.map(t=>t.date.slice(0,7)))].sort().reverse();if(S.m!=="all"&&!months.includes(S.m))S.m="all";
+$("mon").innerHTML='<option value="all">All time</option>'+months.map(m=>'<option value="'+m+'"'+(m===S.m?" selected":"")+">"+new Date(m+"-01T00:00:00").toLocaleString("en",{month:"short",year:"numeric"})+"</option>").join("");
+$("cur").innerHTML=["INR","USD","EUR","GBP","AED"].map(c=>'<option'+(c===S.cur?" selected":"")+">"+c+"</option>").join("");
+$("demo").hidden=!S.tx.some(t=>t.demo);
+const fl=S.tx.filter(t=>S.m==="all"||t.date.startsWith(S.m)),inc=sum(fl,"income"),exp=sum(fl,"expense"),net=inc-exp,bal=sum(S.tx,"income")-sum(S.tx,"expense");
+$("kpis").innerHTML=[["Income",f(inc),"ok"],["Expenses",f(exp),"bad"],["Net this period",f(net),net>=0?"ok":"bad"],["Savings rate",inc>0?Math.round(net/inc*100)+"%":"–",""],["Balance (all time)",f(bal),bal>=0?"cy":"bad"]].map(k=>'<div class="kpi"><small>'+k[0]+'</small><b class="'+k[2]+'">'+k[1]+"</b></div>").join("");
+anim();charts(fl);
+const qv=$("q").value.toLowerCase(),tv=$("fty").value,rows=fl.filter(t=>(!tv||t.type===tv)&&(!qv||(t.category+" "+t.note).toLowerCase().includes(qv))).sort((a,b)=>b.date.localeCompare(a.date)),show=rows.slice(0,200);
+$("tb").innerHTML=show.length?show.map(t=>'<tr><td>'+t.date+"</td><td>"+esc(t.category)+'</td><td class="n">'+esc(t.note)+'</td><td class="'+(t.type==="income"?"ok":"bad")+'">'+(t.type==="income"?"+":"−")+f(t.amount,2)+'</td><td><button data-a="e" data-id="'+t.id+'">Edit</button>'+(S.del===t.id?'<button data-a="y" data-id="'+t.id+'">Confirm delete</button>':'<button data-a="d" data-id="'+t.id+'">Delete</button>')+"</td></tr>").join(""):'<tr><td colspan="5" class="n">No transactions to show. Add one above, or load demo data from Data tools.</td></tr>';
+$("more").textContent=rows.length>200?"Showing the latest 200 of "+rows.length+" matching transactions.":"";
+types();lrender()}
+function charts(fl){const hasC=typeof Chart!=="undefined";if(hasC){Chart.defaults.color=css("--mut");Chart.defaults.borderColor="rgba(138,160,189,.18)"}
+const ms=[...new Set(S.tx.map(t=>t.date.slice(0,7)))].sort().slice(-6);$("e1").style.display=ms.length?"none":"flex";
+if(!hasC){$("e1").style.display="flex";$("e1").textContent="Charts need the Chart.js library, which could not load.";$("e2").style.display="flex";return}
+if(c1)c1.destroy();c1=ms.length?new Chart($("c1"),{type:"bar",data:{labels:ms.map(m=>new Date(m+"-01T00:00:00").toLocaleString("en",{month:"short",year:"2-digit"})),datasets:[{label:"Income",data:ms.map(m=>sum(S.tx.filter(t=>t.date.startsWith(m)),"income")),backgroundColor:css("--ok")},{label:"Expenses",data:ms.map(m=>sum(S.tx.filter(t=>t.date.startsWith(m)),"expense")),backgroundColor:css("--bad")}]},options:{responsive:true,maintainAspectRatio:false}}):null;
+const by={};fl.filter(t=>t.type==="expense").forEach(t=>by[t.category]=(by[t.category]||0)+t.amount);const k=Object.keys(by).sort((a,b)=>by[b]-by[a]);
+$("e2").style.display=k.length?"none":"flex";if(c2)c2.destroy();c2=k.length?new Chart($("c2"),{type:"doughnut",data:{labels:k,datasets:[{data:k.map(x=>by[x]),backgroundColor:k.map((x,i)=>PAL[i%PAL.length]),borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"right"}}}}):null}
+function types(){$("cl").innerHTML=($("ty").value==="income"?INC:CATS).map(c=>'<option value="'+c+'">').join("")}
+function resetForm(){S.edit=null;$("d").value=today();$("a").value="";$("c").value="";$("n").value="";$("sub").textContent="Add";$("can").hidden=true;$("ft").textContent="Add transaction"}
+function submit(){const d=$("d").value,ty=$("ty").value,a=parseFloat($("a").value),c=$("c").value.trim(),n=$("n").value.trim();
+if(!normDate(d))return msg("Pick a valid date.");if(!(a>0)||!isFinite(a))return msg("Enter an amount greater than zero.");if(!c)return msg("Choose or type a category.");
+const t=clean({id:S.edit||uid(),date:d,type:ty,amount:a,category:c,note:n}),i=S.tx.findIndex(x=>x.id===S.edit);
+if(i>=0){t.demo=undefined;S.tx[i]=clean(t)}else S.tx.push(t);save();msg(i>=0?"Changes saved.":"Transaction added.",true);resetForm();render()}
+$("sub").onclick=submit;$("can").onclick=()=>{resetForm();msg("")};$("ty").onchange=types;$("q").oninput=render;$("fty").onchange=render;
+$("mon").onchange=e=>{S.m=e.target.value;render()};$("cur").onchange=e=>{S.cur=e.target.value;save();render()};
+$("tb").onclick=e=>{const b=e.target.closest("button");if(!b)return;const id=b.dataset.id,a=b.dataset.a;
+if(a==="d"){S.del=id;render()}else if(a==="y"){S.tx=S.tx.filter(t=>t.id!==id);S.del=null;save();render()}
+else if(a==="e"){const t=S.tx.find(x=>x.id===id);if(!t)return;S.edit=id;$("d").value=t.date;$("ty").value=t.type;types();$("a").value=t.amount;$("c").value=t.category;$("n").value=t.note;$("sub").textContent="Save changes";$("can").hidden=false;$("ft").textContent="Edit transaction";$("d").scrollIntoView({behavior:"smooth",block:"center"})}};
+$("b1").onclick=()=>{$("io").value=toCSV();msg2(S.tx.length?"CSV ready. Copy it into a file named transactions.csv.":"No transactions to export yet.")};
+$("b2").onclick=()=>{$("io").value=JSON.stringify({app:"nexus-ai",version:1,cur:S.cur,tx:S.tx,loans:S.loans},null,1);msg2("Backup ready. Copy it and keep it somewhere safe.")};
+$("b3").onclick=()=>importCSV($("io").value);
+$("b4").onclick=()=>{try{const o=JSON.parse($("io").value);if(!o||!Array.isArray(o.tx))throw 0;S.tx=o.tx.filter(valid).map(clean);if(o.cur)S.cur=o.cur;S.loans=Array.isArray(o.loans)?o.loans.filter(validL):[];save();render();msg2("Restored "+S.tx.length+" transactions and "+S.loans.length+" loans.")}catch(e){msg2("That is not a valid NEXUS AI backup.")}};
+$("b5").onclick=async()=>{const v=$("io").value;if(!v)return msg2("Nothing to copy.");try{await navigator.clipboard.writeText(v);msg2("Copied.")}catch(e){$("io").select();msg2("Selected. Press Ctrl+C or long-press to copy.")}};
+$("b6").onclick=()=>{S.tx=S.tx.concat(demo());save();render();msg2("Demo data added. Remove it any time with the banner button.")};
+$("rmdemo").onclick=()=>{S.tx=S.tx.filter(t=>!t.demo);save();render()};
+$("b7").onclick=()=>{if(!clr){clr=1;$("b7").textContent="Click again to erase everything";setTimeout(()=>{clr=0;$("b7").textContent="Clear all data"},4000)}else{S.tx=[];S.loans=[];clr=0;$("b7").textContent="Clear all data";save();render();msg2("All data cleared.")}};
+$("fi").onchange=e=>{const fl=e.target.files[0];if(!fl)return;const r=new FileReader();r.onload=()=>{$("io").value=r.result;msg2("File loaded. Choose Import CSV text or Restore JSON backup.")};r.readAsText(fl)};
+let prevK=[];
+function anim(){if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;const fl=S.tx.filter(t=>S.m==="all"||t.date.startsWith(S.m)),inc=sum(fl,"income"),exp=sum(fl,"expense"),net=inc-exp,bal=sum(S.tx,"income")-sum(S.tx,"expense"),v=[[inc,0],[exp,0],[net,0],[inc>0?net/inc*100:null,1],[bal,0]];
+document.querySelectorAll(".kpi b").forEach((el,i)=>{const [x,p]=v[i]||[null];if(x===null)return;const from=prevK[i]||0,t0=performance.now(),st=n=>{const k=Math.min(1,(n-t0)/700),e=1-Math.pow(1-k,3),y=from+(x-from)*e;el.textContent=p?Math.round(y)+"%":f(y);if(k<1)requestAnimationFrame(st)};requestAnimationFrame(st)});prevK=v.map(a=>a[0]||0)}
+const ymd=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"),dago=n=>{const d=new Date();d.setDate(d.getDate()-n);return ymd(d)};
+const spend=(a,b)=>S.tx.filter(t=>t.type==="expense"&&t.date>=a&&t.date<=b).reduce((s,t)=>s+t.amount,0);
+function topCats(a,b,n){const m={};S.tx.filter(t=>t.type==="expense"&&t.date>=a&&t.date<=b).forEach(t=>m[t.category]=(m[t.category]||0)+t.amount);return Object.entries(m).sort((x,y)=>y[1]-x[1]).slice(0,n)}
+function say(t,who,acts){const d=document.createElement("div");d.className="msg "+(who||"ai");$("log").appendChild(d);if(who==="me"){d.textContent=t;$("log").scrollTop=1e9;return}
+d.innerHTML='<span class="dots"><i></i><i></i><i></i></span>';setTimeout(()=>{d.textContent="";let i=0;const iv=setInterval(()=>{i+=3;d.textContent=t.slice(0,i);$("log").scrollTop=1e9;if(i>=t.length){clearInterval(iv);(acts||[]).forEach(a=>{const b=document.createElement("button");b.textContent=a[0];b.onclick=()=>{d.querySelectorAll("button").forEach(x=>x.remove());a[1]()};d.appendChild(b)})}},14)},420)}
+function brief(){const h=new Date().getHours(),g=h<12?"Good morning":h<17?"Good afternoon":"Good evening";if(!S.tx.length)return say(g+". I have no transactions to work with yet. Add a few entries or load demo data and I will brief you here every time you open the page.");
+const t=today(),w=spend(dago(6),t),p=spend(dago(13),dago(7)),tp=topCats(t.slice(0,7)+"-01",t,1)[0],bal=sum(S.tx,"income")-sum(S.tx,"expense");let s=g+". You have spent "+f(w)+" over the last 7 days";if(p>0)s+=", "+(w>=p?Math.round((w-p)/p*100)+"% more":Math.round((p-w)/p*100)+"% less")+" than the 7 days before";s+=". ";if(tp)s+="Your biggest category this month is "+tp[0]+" at "+f(tp[1])+". ";const A=S.loans.filter(l=>owed(l)>0),od=A.filter(l=>l.due&&dd(l.due)<0);say(s+"Your recorded balance is "+f(bal)+"."+(A.length?" People owe you "+f(A.reduce((x,l)=>x+owed(l),0))+(od.length?", and "+od.length+(od.length===1?" repayment is":" repayments are")+" overdue.":"."):""))}
+function ask(q){q=q.trim();if(!q)return;say(q,"me");const s=q.toLowerCase(),t=today(),mo=t.slice(0,7)+"-01",num=(s.match(/(\d[\d,]*\.?\d*)/)||[])[1],n=num?parseFloat(num.replace(/,/g,"")):0,bal=sum(S.tx,"income")-sum(S.tx,"expense");
+if(/^(add|log|record|spent|paid|earned|received)\b/.test(s)&&n>0){const inc=/income|earned|received|salary/.test(s),list=inc?INC:CATS,rest=q.replace(/^(add|log|record|spent|paid|earned|received)\s*(an?\s*)?(expense|income)?/i,"").replace(num,"").replace(/^[\s₹]*(rs\.?|inr)?\s*(on|for|in|of)?\s*/i,"").trim(),cat=list.find(c=>s.includes(c.toLowerCase()))||(inc?"Other income":"Other"),tx={id:uid(),date:t,type:inc?"income":"expense",amount:n,category:cat,note:rest.slice(0,120)};
+return say("I can record "+(inc?"income":"an expense")+" of "+f(n,2)+" under "+cat+(rest?" ("+rest+")":"")+", dated today. Shall I add it?",0,[["Yes, add it",()=>{S.tx.push(clean(tx));save();render();say("Done. It is in your records.")}],["Cancel",()=>say("Cancelled. Nothing was added.")]])}
+if(/afford|buy|purchase/.test(s)&&n>0)return say(!S.tx.length?"I need some transactions first to judge that.":n>bal?"Not comfortably. Your recorded balance is "+f(bal)+", which is "+f(n-bal)+" short of "+f(n)+".":"You could. Your recorded balance is "+f(bal)+", so it would leave "+f(bal-n)+". This only uses what you have entered, so treat it as a guide, not financial advice.");
+if(/\bowe|lend|lent|loan/.test(s)){const A=S.loans.filter(l=>owed(l)>0);return say(A.length?"People owe you "+f(A.reduce((x,l)=>x+owed(l),0))+" in total: "+A.map(l=>l.who+" "+f(owed(l))+" ("+lstat(l)[0].toLowerCase()+")").join(", ")+".":"No outstanding loans are recorded.")}
+if(/week/.test(s)){const w=spend(dago(6),t),tp=topCats(dago(6),t,3);return say(w?"In the last 7 days you spent "+f(w)+(tp.length?". Top categories: "+tp.map(x=>x[0]+" "+f(x[1])).join(", ")+".":"."):"No expenses recorded in the last 7 days.")}
+if(/month/.test(s)){const d=new Date(),a=spend(mo,t),pm=spend(ymd(new Date(d.getFullYear(),d.getMonth()-1,1)),ymd(new Date(d.getFullYear(),d.getMonth(),0)));return say("This month you have spent "+f(a)+" so far."+(pm>0?" Last month the total was "+f(pm)+".":""))}
+if(/balance|how much (do i have|money)/.test(s))return say("Your recorded balance is "+f(bal)+" (all income minus all expenses you have entered).");
+if(/top|biggest|most|waste|wasting|where|categor/.test(s)){let tp=topCats(mo,t,3),w="this month";if(!tp.length){tp=topCats("0000-01-01",t,3);w="overall"}return say(tp.length?"Your top spending "+w+": "+tp.map(x=>x[0]+" "+f(x[1])).join(", ")+".":"No expenses recorded yet.")}
+if(/saving|rate/.test(s)){const m=S.tx.filter(x=>x.date>=mo),i=sum(m,"income"),e=sum(m,"expense");return say(i>0?"This month you earned "+f(i)+" and spent "+f(e)+", a savings rate of "+Math.round((i-e)/i*100)+"%.":"I need some income recorded this month to work out a savings rate.")}
+if(/brief|summary|status|overview|how am i/.test(s))return brief();
+if(/^(hi|hello|hey)\b/.test(s))return brief();
+say("I can answer from your records or add entries for you. Try: how much did I spend this week, where am I spending most, can I afford 15000, my balance, savings rate, or add expense 500 food lunch.")}
+["Daily briefing","How much did I spend this week?","Where am I spending most?","Can I afford 15000?","Add expense 500 food lunch"].forEach(c=>{const b=document.createElement("button");b.textContent=c;b.onclick=()=>ask(c);$("chips").appendChild(b)});
+$("go").onclick=()=>{const v=$("ask").value;$("ask").value="";ask(v)};$("ask").onkeydown=e=>{if(e.key==="Enter")$("go").click()};
+const validL=l=>l&&typeof l.who==="string"&&l.who.trim()!==""&&l.amount>0&&/^\d{4}-\d{2}-\d{2}$/.test(l.date)&&Array.isArray(l.pay);
+const paid=l=>l.pay.reduce((s,p)=>s+p.amount,0),owed=l=>Math.max(0,Math.round((l.amount-paid(l))*100)/100),dd=s=>Math.round((new Date(s+"T00:00:00")-new Date(today()+"T00:00:00"))/864e5);
+function lstat(l){if(owed(l)<=0)return["Settled","ok"];if(!l.due)return["No due date","mut"];const d=dd(l.due);return d<0?["Overdue by "+(-d)+" day"+(d===-1?"":"s"),"bad"]:d===0?["Due today","bad"]:d<=3?["Due in "+d+" day"+(d===1?"":"s"),"warn"]:["Due "+l.due,"mut"]}
+function lrender(){const L=S.loans.slice().sort((a,b)=>(owed(a)<=0)-(owed(b)<=0)||(a.due||"9").localeCompare(b.due||"9")),tot=L.reduce((s,l)=>s+owed(l),0),od=L.filter(l=>owed(l)>0&&l.due&&dd(l.due)<0);
+$("ltot").textContent=L.length?f(tot)+" outstanding"+(od.length?" \u00b7 "+od.length+" overdue":""):"";
+$("ll").innerHTML=L.length?L.map(l=>{const o=owed(l),st=lstat(l),pc=Math.min(100,Math.round(paid(l)/l.amount*100));return'<div class="ln"><div class="lh"><b>'+esc(l.who)+'</b><span class="'+st[1]+'">'+st[0]+'</span></div><small class="mut">Lent '+f(l.amount,2)+' on '+l.date+(l.due?' \u00b7 due '+l.due:'')+(l.note?' \u00b7 '+esc(l.note):'')+'</small><div class="pb"><i data-w="'+pc+'"></i></div><div class="lf"><span>'+(o>0?'<b>'+f(o,2)+'</b> still owed':'Fully repaid')+' ('+pc+'% repaid)</span>'+(o>0?'<input type="number" min="0.01" step="0.01" placeholder="Repayment" id="rp'+l.id+'"><button data-a="r" data-id="'+l.id+'">Add repayment</button><button data-a="s" data-id="'+l.id+'">Mark settled</button>':'')+(S.ld===l.id?'<button data-a="y" data-id="'+l.id+'">Confirm delete</button>':'<button data-a="d" data-id="'+l.id+'">Delete</button>')+'</div></div>'}).join(""):'<p class="mut">No loans recorded. Add who you lent money to above and I will track repayments and remind you.</p>';
+requestAnimationFrame(()=>document.querySelectorAll(".pb i").forEach(i=>i.style.width=i.dataset.w+"%"));
+const act=S.loans.filter(l=>owed(l)>0&&l.due&&dd(l.due)<=3).sort((a,b)=>a.due.localeCompare(b.due));$("rem").hidden=!act.length;$("rem").innerHTML=act.length?"<b>Reminders</b>"+act.slice(0,4).map(l=>"<div>"+esc(l.who)+" owes you "+f(owed(l),2)+", "+lstat(l)[0].toLowerCase()+"</div>").join("")+(act.length>4?'<div class="mut">and '+(act.length-4)+" more</div>":""):""}
+function addLoan(){const w=$("lw").value.trim(),a=parseFloat($("la").value),d=$("ld").value,du=$("lu").value,m=t=>{$("lmsg").textContent=t;$("lmsg").className="bad"};
+if(!w)return m("Enter who you lent to.");if(!(a>0))return m("Enter an amount greater than zero.");if(!normDate(d))return m("Pick the date you lent it.");if(du&&du<d)return m("The due date cannot be before the lent date.");
+S.loans.push({id:uid(),who:w.slice(0,40),amount:Math.round(a*100)/100,date:d,due:du,note:$("ln").value.trim().slice(0,100),pay:[]});save();["lw","la","lu","ln"].forEach(i=>$(i).value="");$("lmsg").textContent="Loan recorded.";$("lmsg").className="ok";lrender()}
+$("lb").onclick=addLoan;
+$("ll").onclick=e=>{const b=e.target.closest("button");if(!b)return;const id=b.dataset.id,l=S.loans.find(x=>x.id===id),a=b.dataset.a;if(!l)return;
+if(a==="r"){const v=parseFloat($("rp"+id).value);if(!(v>0))return;l.pay.push({id:uid(),date:today(),amount:Math.min(v,owed(l))});save();lrender()}
+else if(a==="s"){const o=owed(l);if(o>0)l.pay.push({id:uid(),date:today(),amount:o});save();lrender()}
+else if(a==="d"){S.ld=id;lrender()}else if(a==="y"){S.loans=S.loans.filter(x=>x.id!==id);S.ld=null;save();lrender()}};
+load();$("d").value=today();$("ld").value=today();render();setTimeout(brief,600);
+$("b8").onclick=()=>{const v=$("io").value;if(!v)return msg2("Nothing to download. Use Show CSV or Show JSON backup first.");const j=v.trim().startsWith("{"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob([v],{type:j?"application/json":"text/csv"}));a.download=j?"nexus-ai-backup.json":"nexus-ai-transactions.csv";document.body.appendChild(a);a.click();a.remove();msg2("Download started.")};
+if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+</script></body></html>
